@@ -19,6 +19,7 @@ This repository holds the full documentation of how the agent was configured, wh
 | [docs/09-tools-reference.md](docs/09-tools-reference.md) | Full reference table of every tool: method, URL, auth, params |
 | [docs/10-security-and-secrets.md](docs/10-security-and-secrets.md) | Secret handling, least-privilege scopes, and safety decisions made during setup |
 | [docs/11-demo-script.md](docs/11-demo-script.md) | Golden demo path — the exact flow used to showcase the agent |
+| [docs/12-lovable-integration.md](docs/12-lovable-integration.md) | Embedding the agent into the Property Flow app (Lovable), auth model, and a troubleshooting note |
 | [CHANGELOG.md](CHANGELOG.md) | Chronological log of decisions and fixes made during setup |
 
 ## Why this stack
@@ -28,5 +29,6 @@ This repository holds the full documentation of how the agent was configured, wh
 - **A public government API (BCRA)** to bring a real, non-mocked Argentina-specific data source into the demo — something most other candidates are unlikely to showcase.
 - **HubSpot** as the CRM for sales-performance reporting, seeded with a realistic dummy dataset.
 - **Google Calendar** as a native OAuth integration for scheduling, with an availability check enforced before booking.
+- **Lovable** to embed the finished agent directly into the agency's existing app (Property Flow), so the demo isn't confined to the ElevenLabs dashboard — see [docs/12-lovable-integration.md](docs/12-lovable-integration.md).
 
 See [docs/01-overview.md](docs/01-overview.md) for the full picture.

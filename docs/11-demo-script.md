@@ -2,6 +2,15 @@
 
 The exact conversational flow used to showcase the agent end-to-end, touching every integration.
 
+## Where to run it from
+
+This flow can be run from either:
+
+- **The ElevenLabs dashboard's test-call UI** (no app dependency, fastest to demo).
+- **Inside the app itself**, via the **"Hablar con RentIA"** button on `/app/asistente` in Property Flow (behind login) — the same agent, tools, and backend, embedded directly into the product. See [12-lovable-integration.md](12-lovable-integration.md) for how this was wired up.
+
+Running it from inside the app is the stronger story for the interview demo: it shows the agent as a real product feature, not just a dashboard configuration.
+
 ## Flow
 
 1. **"Hola Renti IA, ¿cómo viene el mes?"** ("How's this month going?")

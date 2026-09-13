@@ -27,6 +27,7 @@ Chronological record of the decisions, fixes, and tradeoffs made while building 
 - The URL field in the tool's form was observed to reset after the secret sub-dialog closed — caught via screenshot before saving and re-entered.
 - Tested the finished tool with ElevenLabs' "Test Tool" — confirmed `Success`, with real seeded deals returned including populated `vendedor` values. Confirmed the tool is attached and active on the agent (visible in the agent's tools list alongside the other 5 custom tools and the native HubSpot connector).
 - Deleted the local seeding script (containing the plaintext token) after use.
+- First real usage (a live voice conversation asking for a salesperson's performance, emailed as a report) surfaced a data-quality bug: `dealstage` was showing HubSpot's raw internal stage ID instead of a readable name, and the LLM's own "(Closed)" guess wasn't reliable. Fetched the real pipeline stage mapping from HubSpot's API and added it directly to the tool's description, also instructing the agent to only count the "won" stage as actual sales revenue rather than summing every deal regardless of stage.
 
 ## ElevenLabs agent configuration
 
@@ -34,6 +35,17 @@ Chronological record of the decisions, fixes, and tradeoffs made while building 
 - Fixed the 5 Supabase-backed custom tools' request bodies to the correct `{accion, params}` shape, verified with real HTTP 200 responses (not just the UI's save confirmation).
 - Rewrote all custom-tool descriptions in English (tool-level and per-parameter) after observing that ambiguous/Spanish-language descriptions were causing ElevenLabs' own configuration assistant to make tool-calling mistakes.
 
+## Lovable / app integration
+
+- Decision: embed the finished agent directly into the agency's existing app (Property Flow, built on Lovable) rather than leaving the demo confined to the ElevenLabs dashboard.
+- Used ElevenLabs' native "Add to your app → Lovable" feature: generates a tailored deployment prompt for this specific agent (ID, tools, auth mode) and copies it to the clipboard for pasting into Lovable's chat.
+- Two approaches were considered: Method 1 (paste the auto-generated prompt into Lovable's chat, let Lovable's AI implement it) vs. Method 2 (hand-write the `ConversationProvider`/`useConversation` wiring and a token-minting server function manually). Method 1 was used.
+- Because the agent is Private (auth-enabled), embedding required a server-minted credential — the client cannot start a session with just the Agent ID. Used the WebRTC flow (`GET /v1/convai/conversation/token`) rather than the WebSocket signed-URL flow, called server-side only.
+- Lovable implemented the integration end-to-end: stored the ElevenLabs API key via its native Connectors feature (rather than a manually-created Supabase env var, as originally planned — a different but security-equivalent mechanism), added a new `elevenlabs-conversation-token` server function gated on the app's own login session, and added a "Hablar con RentIA" button with a live speaking/listening indicator to `/app/asistente`.
+- Hit a runtime bug immediately after first deploy: `useRegisterCallbacks must be used within a ConversationProvider`, thrown by `@elevenlabs/react`'s `useConversation` hook when its consuming component isn't wrapped in a `ConversationProvider`. Lovable diagnosed and fixed it by adding the wrapper, then republished.
+- Verified working end-to-end in a live conversation from inside the app, independent of the ElevenLabs dashboard. Agent LLM and dashboard configuration language were not touched as part of this work, consistent with the project's standing constraint.
+
 ## Documentation
 
 - This repository's `docs/` structure and `CHANGELOG.md` were written to capture the above for the demo, in English, to be legible to reviewers unfamiliar with the project's day-to-day Spanish-language working notes.
+- Added `docs/12-lovable-integration.md` documenting the app-embedding work, and updated `README.md`'s Quick Links and `docs/11-demo-script.md` to point to it.
