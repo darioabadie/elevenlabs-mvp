@@ -3,10 +3,14 @@
 **Renti IA** is a Spanish-speaking voice agent built on **ElevenLabs Agents** for internal use by a property management agency in Argentina. It's a demo built for the ElevenLabs interview take-home challenge: an agent that a real estate agency's staff (not the tenant) can talk to, to get financial summaries, check expiring leases, evaluate a prospective tenant's credit history with a live government API, schedule visits, email reports, and check salesperson performance in the CRM.
 
 This repository holds the full documentation of how the agent was configured, which integrations it connects to, the tradeoffs made along the way, and how to run the demo.
+## Core Functionalities
+
+![Renti IA core functionalities diagram](docs/core-functionalities-diagram.png)
 
 ## Architecture at a glance
 
 ![Renti IA architecture diagram](docs/architecture-diagram.png)
+
 
 ## Quick links
 
