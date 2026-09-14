@@ -2,46 +2,9 @@
 
 ## System diagram
 
-```
-                              ┌─────────────────────────────┐
-                              │         User (voice)         │
-                              │  agency staff / administrator │
-                              └──────────────┬───────────────┘
-                                             │ speech
-                                             ▼
-                              ┌─────────────────────────────┐
-                              │        ElevenLabs Agent       │
-                              │           "Renti IA"          │
-                              │  STT → LLM (tool-calling) → TTS│
-                              └──────────────┬───────────────┘
-                                             │ tool calls
-              ┌──────────────────┬──────────┼──────────────┬──────────────────┐
-              ▼                  ▼          ▼              ▼                  ▼
-   ┌────────────────────┐ ┌──────────┐ ┌──────────┐ ┌─────────────┐ ┌──────────────┐
-   │ Supabase Edge Fn    │ │  BCRA    │ │  Google  │ │   HubSpot    │ │   HubSpot    │
-   │  voice-agent-api    │ │  public  │ │ Calendar │ │  (native     │ │  (custom     │
-   │                     │ │   API    │ │ (native  │ │  connector)  │ │  webhook)    │
-   │ resumen_periodo     │ │          │ │  OAuth)  │ │              │ │              │
-   │ contratos_por_vencer│ │ CUIT/CUIL│ │check_    │ │ contacts /   │ │ deals w/     │
-   │ actualizaciones_    │ │  lookup  │ │availab.  │ │ companies    │ │ custom       │
-   │   proximas          │ │          │ │create_   │ │ CRUD tools   │ │ "vendedor"   │
-   │ enviar_reporte ──┐  │ │          │ │  event   │ │              │ │ property     │
-   └──────────────────┼──┘ └──────────┘ └──────────┘ └──────────────┘ └──────────────┘
-                       │
-                       ▼
-                ┌─────────────┐
-                │   Resend    │
-                │ (renti.com.ar│
-                │   domain)   │
-                └─────────────┘
+![Renti IA architecture diagram](architecture-diagram.png)
 
-   Supabase Edge Fn also reads/writes:
-   ┌─────────────────────────┐
-   │ Supabase Postgres        │
-   │  historico, propiedades  │
-   │  (property-flow app DB)  │
-   └─────────────────────────┘
-```
+The real estate administrator talks to Renti IA (the ElevenLabs agent) by voice. The agent calls out to five tool groups: the `voice-agent-api` Supabase Edge Function (financial summaries, expiring leases, upcoming rent adjustments, property lookups — plus `enviar_reporte`, which hands off to Resend for delivery), the BCRA public credit-bureau API, Google Calendar (native OAuth integration, availability check before booking), HubSpot (both the native connector and the custom webhook tool that reads the `vendedor` deal property), and Resend for transactional email. The `voice-agent-api` function itself reads and writes the same Supabase Postgres tables (`historico`, `propiedades`) that back the `property-flow` app.
 
 ## Components
 

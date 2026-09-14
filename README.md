@@ -4,6 +4,10 @@
 
 This repository holds the full documentation of how the agent was configured, which integrations it connects to, the tradeoffs made along the way, and how to run the demo.
 
+## Architecture at a glance
+
+![Renti IA architecture diagram](docs/architecture-diagram.png)
+
 ## Quick links
 
 | Doc | What's in it |
@@ -20,6 +24,7 @@ This repository holds the full documentation of how the agent was configured, wh
 | [docs/10-security-and-secrets.md](docs/10-security-and-secrets.md) | Secret handling, least-privilege scopes, and safety decisions made during setup |
 | [docs/11-demo-script.md](docs/11-demo-script.md) | Golden demo path — the exact flow used to showcase the agent |
 | [docs/12-lovable-integration.md](docs/12-lovable-integration.md) | Embedding the agent into the Property Flow app (Lovable), auth model, and a troubleshooting note |
+| [docs/example-questions.md](docs/example-questions.md) | Example questions to ask the agent, grouped by capability |
 | [CHANGELOG.md](CHANGELOG.md) | Chronological log of decisions and fixes made during setup |
 
 ## Why this stack
